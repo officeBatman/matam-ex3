@@ -20,7 +20,7 @@ class HealthPoints
         HealthPoints& operator-(int hp);
         HealthPoints& operator+(int hp);
         HealthPoints& operator+=(int hp);
-        HealthPoints& operator+=(int hp);
+        HealthPoints& operator-=(int hp);
 
         bool operator==(const HealthPoints& other) const;
         bool operator!=(const HealthPoints& other) const;

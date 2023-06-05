@@ -55,9 +55,9 @@ HealthPoints& HealthPoints::operator+=(int hp)
     return *this;
 }
 
-HealthPoints& HealthPoints::operator+=(int hp)
+HealthPoints& HealthPoints::operator-=(int hp)
 {
-    m_hp += hp;
+    m_hp -= hp;
 
     if(m_hp < MIN_HP) {
         m_hp = MIN_HP;
