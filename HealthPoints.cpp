@@ -100,6 +100,16 @@ bool HealthPoints::operator>=(const HealthPoints& other) const
     return m_hp >= other.m_hp;
 }
 
+int operator-(int num, const HealthPoints& other)
+{
+    return num - other.m_hp;
+}
+
+int operator+(int num, const HealthPoints& other)
+{
+    return num - other.m_hp;
+}
+
 std::ostream& operator<<(std::ostream& os, const HealthPoints& hp)
 {
     os << hp.m_hp << "(" << hp.m_maxHp << ")";
