@@ -1,6 +1,8 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <stdexcept>
+
 template <class T>
 class Queue
 {
@@ -11,7 +13,7 @@ private:
     Node** m_tail;
     int m_size;
 public:
-    class EmptyQueue {};
+    class EmptyQueue;
     class Iterator;
     class ConstIterator;
 
@@ -38,6 +40,14 @@ struct Queue<T>::Node
 };
 
 template <class T>
+class Queue<T>::EmptyQueue : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Queue is empty";
+    }
+};
+
+template <class T>
 class Queue<T>::Iterator
 {
 private:
@@ -45,7 +55,12 @@ private:
 public:
     Iterator(Node* node) : m_node(node) {}
 
-    class InvalidOperation {};
+    class InvalidOperation : public std::exception {
+    public:
+        const char* what() const noexcept override {
+            return "Invalid operation on queue iterator";
+        }
+    };
 
     T& operator*() {
         if (m_node == nullptr) {
@@ -78,7 +93,12 @@ private:
 public:
     ConstIterator(const Node* node) : node(node) {}
 
-    class InvalidOperation {};
+    class InvalidOperation : public std::exception {
+    public:
+        const char* what() const noexcept override {
+            return "Invalid operation on const queue iterator";
+        }
+    };
 
     const T& operator*() {
         if (node == nullptr) {
