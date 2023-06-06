@@ -102,12 +102,32 @@ bool HealthPoints::operator>=(const HealthPoints& other) const
 
 int operator-(int num, const HealthPoints& other)
 {
-    return num - other.m_hp;
+    num -= other.m_hp;
+
+    if(num < MIN_HP) {
+        num = MIN_HP;
+    }
+
+    if(num > other.m_maxHp) {
+        num = other.m_maxHp;
+    }
+
+    return num;
 }
 
 int operator+(int num, const HealthPoints& other)
 {
-    return num - other.m_hp;
+    num += other.m_hp;
+
+    if(num < MIN_HP) {
+        num = MIN_HP;
+    }
+
+    if(num > other.m_maxHp) {
+        num = other.m_maxHp;
+    }
+
+    return num;
 }
 
 std::ostream& operator<<(std::ostream& os, const HealthPoints& hp)
