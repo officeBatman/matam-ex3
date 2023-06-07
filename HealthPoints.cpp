@@ -59,6 +59,11 @@ bool HealthPoints::operator==(const HealthPoints& other) const
     return m_hp == other.m_hp;
 }
 
+bool operator==(int hp, const HealthPoints& other)
+{
+    return hp == other.m_hp;
+}
+
 bool HealthPoints::operator!=(const HealthPoints& other) const
 {
     return m_hp != other.m_hp;
@@ -84,16 +89,16 @@ bool HealthPoints::operator>=(const HealthPoints& other) const
     return m_hp >= other.m_hp;
 }
 
-HealthPoints operator-(int num, const HealthPoints& other)
+HealthPoints operator-(int hp, const HealthPoints& other)
 {
-    HealthPoints result = HealthPoints(num);
+    HealthPoints result = HealthPoints(hp);
     result -= other.m_hp;
     return result;
 }
 
-HealthPoints operator+(int num, const HealthPoints& other)
+HealthPoints operator+(int hp, const HealthPoints& other)
 {
-    return other + num;
+    return other + hp;
 }
 
 std::ostream& operator<<(std::ostream& os, const HealthPoints& hp)
