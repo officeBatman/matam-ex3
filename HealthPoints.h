@@ -15,7 +15,7 @@ class HealthPoints
     public:
         class InvalidArgument {};
 
-        explicit HealthPoints(int hp = DEFAULT_MAX_HP);
+        HealthPoints(int hp = DEFAULT_MAX_HP);
 
         HealthPoints operator-(int hp) const;
         HealthPoints operator+(int hp) const;
