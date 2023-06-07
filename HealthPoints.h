@@ -15,10 +15,10 @@ class HealthPoints
     public:
         class InvalidArgument {};
 
-        HealthPoints(int hp = DEFAULT_MAX_HP);
+        explicit HealthPoints(int hp = DEFAULT_MAX_HP);
 
-        HealthPoints& operator-(int hp);
-        HealthPoints& operator+(int hp);
+        HealthPoints operator-(int hp) const;
+        HealthPoints operator+(int hp) const;
         HealthPoints& operator+=(int hp);
         HealthPoints& operator-=(int hp);
 
@@ -29,10 +29,10 @@ class HealthPoints
         bool operator<=(const HealthPoints& other) const;
         bool operator>=(const HealthPoints& other) const;
 
-        friend int operator-(int num, const HealthPoints& other);
-        friend int operator+(int num, const HealthPoints& other);
-
+        friend HealthPoints operator-(int num, const HealthPoints& other);
         friend std::ostream& operator<<(std::ostream& os, const HealthPoints& hp);
 };
+
+HealthPoints operator+(int num, const HealthPoints& other);
 
 #endif
