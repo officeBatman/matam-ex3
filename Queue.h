@@ -10,17 +10,18 @@ private:
     struct Node;
 
     Node* m_head;
-    Node** m_tail;
+    Node* m_tail;
     int m_size;
 
-    static void swap(T& a, T& b);
+    template <class U>
+    static void swap(U& a, U& b);
 
 public:
     class EmptyQueue;
     class Iterator;
     class ConstIterator;
 
-    Queue() : m_head(nullptr), m_tail(&m_head), m_size(0) {}
+    Queue() : m_head(nullptr), m_tail(nullptr), m_size(0) {}
     Queue(const Queue&);
     Queue& operator=(const Queue&);
     ~Queue();
@@ -129,19 +130,21 @@ public:
 template <class T>
 Queue<T>::~Queue() {
     // Free all the nodes associated with this queue.
-    for (Node* node = m_head; node != nullptr; ) {
-        Node* next = node->m_next;
-        delete node;
-        // Moving the pointer inside of the for so the deleted node is not
-        // accessed after it is deleted.
-        node = next;
+    while (this->size() > 0) {
+        this->popFront();
     }
 }
 
 template <class T>
 void Queue<T>::pushBack(const T& data) {
-    *this->m_tail = new Node { data, nullptr };
-    this->m_tail = &(*this->m_tail)->m_next;
+    Node* node = new Node { data, nullptr };
+    if (this->m_tail != nullptr) {
+        this->m_tail->m_next = node;
+        this->m_tail = node;
+    } else {
+        // If tail == nullptr, then head == nullptr.
+        this->m_head = this->m_tail = node;
+    }
     this->m_size++;
 }
 
@@ -173,7 +176,7 @@ void Queue<T>::popFront() {
 
     // If the queue is now empty, we need to update the tail pointer.
     if (m_head == nullptr) {
-        m_tail = &m_head;
+        m_tail = nullptr;
     }
 }
 
@@ -201,26 +204,27 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 }
 
 template <class T, class F>
-Queue<T> filter(const Queue<T>& queue, F filterFunction) {
+Queue<T> filter(const Queue<T>& queue, F& filterFunction) {
     Queue<T> out;
-    for(typename Queue<T>::ConstIterator it = queue.begin(); it != queue.end(); ++it) {
-        if (filterFunction(*it)) {
-            out.pushBack(*it);
+    for (const T& element : queue) {
+        if (filterFunction(element)) {
+            out.pushBack(element);
         }
     }
     return out;
 }
 
 template <class T, class F>
-void transform(Queue<T>& queue, F transformation) {
-    for (typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it) {
-        transformation(*it);
+void transform(Queue<T>& queue, F& transformation) {
+    for (T& element : queue) {
+        transformation(element);
     }
 }
 
 template <class T>
-void Queue<T>::swap(T& a, T& b) {
-    T temp = a;
+template <class U>
+void Queue<T>::swap(U& a, U& b) {
+    U temp = a;
     a = b;
     b = temp;
 }
@@ -238,12 +242,14 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& other) {
 
 template <class T>
 Queue<T>::Queue(const Queue<T>& other) : Queue() {
-    for (typename Queue<T>::ConstIterator it = other.begin(); it != other.end(); ++it) {
+    for (const T& element : other) {
         try {
-            this->pushBack(*it);
+            this->pushBack(element);
         } catch (const std::bad_alloc&) {
             // If an error has occured, we need to free the memory.
-            this->~Queue();
+            while (this->size() > 0) {
+                this->popFront();
+            }
             throw;
         }
     }
