@@ -13,7 +13,7 @@ private:
     Node** m_tail;
     int m_size;
 
-    void swap(T& a, T& b);
+    static void swap(T& a, T& b);
 
 public:
     class EmptyQueue;
@@ -239,7 +239,13 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& other) {
 template <class T>
 Queue<T>::Queue(const Queue<T>& other) : Queue() {
     for (typename Queue<T>::ConstIterator it = other.begin(); it != other.end(); ++it) {
-        this->pushBack(*it);
+        try {
+            this->pushBack(*it);
+        } catch (const std::bad_alloc&) {
+            // If an error has occured, we need to free the memory.
+            this->~Queue();
+            throw;
+        }
     }
 }
 
