@@ -25,14 +25,44 @@ public:
     Queue(const Queue&);
     Queue& operator=(const Queue&);
     ~Queue();
+    /*
+     * Pushes a new element to the back of the queue.
+     */
     void pushBack(const T&);
+    /*
+     * Returns a mutable reference to the front element of the queue.
+     * Throws EmptyQueue if the queue is empty.
+     */
     T& front();
+    /*
+     * Returns an immutable reference to the front element of the queue.
+     * Throws EmptyQueue if the queue is empty.
+     */
     const T& front() const;
+    /*
+     * Removes the front element of the queue.
+     * Throws EmptyQueue if the queue is empty.
+     */
     void popFront();
+    /*
+     * Returns the number of elements in the queue.
+     */
     int size() const;
+    /*
+     * Returns an iterator to the beginning of the queue.
+     */
     Iterator begin();
+    /*
+     * Returns an immutable iterator to the beginning of the queue.
+     */
     ConstIterator begin() const;
+    /*
+     * Returns an iterator to the end of the queue.
+     */
     Iterator end();
+    /*
+     * Returns an immutable iterator to the end of the queue.
+     */
     ConstIterator end() const;
 };
 
@@ -203,6 +233,9 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
     return ConstIterator(nullptr);
 }
 
+/*
+ * Filters the elements of the queue using the given filter function/lambda.
+ */
 template <class T, class F>
 Queue<T> filter(const Queue<T>& queue, F& filterFunction) {
     Queue<T> out;
@@ -214,6 +247,9 @@ Queue<T> filter(const Queue<T>& queue, F& filterFunction) {
     return out;
 }
 
+/*
+ * Transforms the elements of the queue using the given transformation function/lambda.
+ */
 template <class T, class F>
 void transform(Queue<T>& queue, F& transformation) {
     for (T& element : queue) {
