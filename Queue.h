@@ -12,6 +12,9 @@ private:
     Node* m_head;
     Node** m_tail;
     int m_size;
+
+    void swap(T& a, T& b);
+
 public:
     class EmptyQueue;
     class Iterator;
@@ -216,7 +219,7 @@ void transform(Queue<T>& queue, F transformation) {
 }
 
 template <class T>
-static void swap(T& a, T& b) {
+void Queue<T>::swap(T& a, T& b) {
     T temp = a;
     a = b;
     b = temp;
